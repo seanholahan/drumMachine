@@ -1,0 +1,460 @@
+
+
+<html lang = "en">
+   
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>B101 Template</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+     <!link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="bootstrapcss.css" media="screen" />
+    
+  </head>
+  <body>
+   
+    
+
+    
+    <div class = "row" id ="header">
+        <button type="button" id ="loop" class="btn-info" >loop</button>
+        <button type="button" id ="extend"  class="btn-info" >extend loop</button>
+        <button type="button" id ="play"  class="btn-info" >play</button>
+        <button type="button" id ="noteRepeat"  class="btn-info" >note repeat</button>
+        <button type="button" id ="faster"  class="btn-info" >faster</button>
+        <button type="button" id ="slower"  class="btn-info" >slower</button>
+        <button type="button" id ="duplicate"  class="btn-info" >duplicate</button>
+        <button type="button" id ="delete"  class="btn-info" >delete</button>
+    </div>
+        <div class = "row" id="yolo">        
+            <button type="button" id ="button1" class="btn btn-primary raised btn-lg" ></button>
+            <button type="button"  id = "button2" class="btn-primary raised btn btn-lg"></button>
+            <button type="button" id = "button3" class="btn-primary raised btn btn-lg"></button>
+            </div>
+        <div class="row">       
+            <button type="button" id = "button4" class="btn-primary raised btn btn-lg"></button>
+            <button type="button" id ="button5" class="btn-primary raised btn btn-lg"></button>
+            <button type="button" id ="button6" class="btn-primary raised btn btn-lg"></button>
+            </div>
+        <div class="row">       
+            <button type="button" id ="button7" class="btn-primary raised btn btn-lg"></button>
+            <button type="button" id="button8"  class="btn-primary raised btn btn-lg"></button>
+            <button type="button" id="button9"  class="btn-primary raised btn btn-lg"></button>
+            </div>
+        <div class = "row" id ="footer">
+        <button type="button"  class="btn-info" >next</button>
+        <button type="button"  class="btn-info" >previous</button>
+        </div>
+    
+    <script src="js/bootstrap.min.js"></script>
+    <script src="jq.js"></script>
+    <button onclick="updateResult()"></button>
+     <script src="howler.js"></script>
+        <script>
+           
+        window.onload= function(){
+     };
+        
+        result = 0;  
+        $(".btn-primary").on('click', function (e) {
+              result = result + 2;
+              //word.fillRect(result*10 ,40, 40, Math.random()*height/2);
+              
+             
+             
+         });
+         
+        
+         var canvas = document.getElementById('a');
+         //word.fillStyle = "#9ea7b8";
+            var loop = false; // should the song loop back once it has finished playing?
+            var pusher = false; // should the list increase to make the song longer?
+            var canRepeat = false;  // when true, on mousedown the sample plays when i%tempo==0
+            var repeat1 = false;  //booleans to see of mouse is being held down
+            var repeat2 = false; 
+            var repeat3 = false; 
+            var repeat4 = false;
+            var repeat5 = false; 
+            var repeat6 = false; 
+            var repeat7 = false;
+            var repeat8 = false; 
+            var repeat9 = false; 
+            var stamp = 0; 
+            var place = 0; //TODO: make so that repeat is in sync with onmouse down
+            var tempo = 4; //the rate at which a note will repeat
+            
+            
+     
+         
+         
+         
+         //CANNOT GET THE BUTTON TEXT COLOR TO CHANGE ON MOUSE EVENT
+         //if (canRepeat === true) {
+           //  $("noteRepeat").on("mouseover", function () {
+             //$(this ).css("color" , "black");
+        // });
+     //}
+         
+         
+         //to load the sound samples
+         var pong = new Howl({urls: ['music/hihat.wav']});
+         var pong2 = new Howl({urls: ['music/1.wav']});
+         var pong3 = new Howl({urls: ['music/2.wav']});
+          var pong4 = new Howl({urls: ['music/3.wav']});
+         var pong5 = new Howl({urls: ['music/4.wav']});
+         var pong6 = new Howl({urls: ['music/5.wav']});
+         var pong7 = new Howl({urls: ['music/6.wav']});
+          var pong8 = new Howl({urls: ['music/7.wav']});
+          var pong9 = new Howl({urls: ['music/9.wav']});
+         //change boolean values based on there button comands
+         document.getElementById("loop").onclick=function(){ loop = !loop;};  //loop
+         document.getElementById("extend").onclick=function(){(pusher = !pusher) ;}; //lengthen loop leghth
+         document.getElementById("play").onclick=function(){i =0; }; //play from beginning
+         
+         //to enable sample repetition while button is held down
+         document.getElementById("noteRepeat").onclick=function(){canRepeat = !canRepeat;};
+         
+         //make the repetition faster 
+         document.getElementById("faster").onclick=function(){if (tempo > .5) {
+                 tempo -= .5;
+             } 
+         };
+         
+         //make the repetition slower
+         document.getElementById("slower").onclick=function(){tempo += .5; };
+         document.getElementById("delete").onclick=function(){
+ 
+             list = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]];
+             };
+         
+         
+         
+         
+         
+                 
+             //1
+             document.getElementById("button1").onmousedown=function(){
+                 //to trigger and terminate sample repetition
+                 if(canRepeat === true) {
+                     stamp = i;
+                     repeat1 = true;
+                     pong.play();
+                     list[i-1].push(1);
+                 } 
+                 //if the sample isnt already at the time slot, add it on
+                 if (i < list.length && list[i].indexOf(1) === -1) {
+                     list[i-1].push(1);
+                     
+             }
+                 pong.play();
+             };
+             document.getElementById("button1").onmouseup=function(){     
+                     repeat1 = false;  
+             };
+             //2
+             document.getElementById("button2").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat2 = true;
+                     pong2.play();
+                     list[i-1].push(2);
+                     
+                 }
+                 if (i < list.length && list[i].indexOf(2) === -1) {
+                     list[i-1].push(2);
+                     
+             }
+             pong2.play();   
+             };
+             document.getElementById("button2").onmouseup=function(){     
+                     repeat2 = false;  
+             };
+             
+             //3
+             document.getElementById("button3").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat3 = true;
+                     pong3.play();
+                     list[i-1].push(3);
+                 }
+                 if (i < list.length && list[i].indexOf(3) === -1) {
+                     list[i-1].push(3);
+                     
+             }pong3.play();    
+             };
+             document.getElementById("button3").onmouseup=function(){     
+                     repeat3 = false;  
+             };
+             
+             //4
+             document.getElementById("button4").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat4 = true;
+                     pong4.play();
+                     list[i-1].push(4);
+                 } 
+                 if (i < list.length && list[i].indexOf(4) === -1) {
+                     list[i-1].push(4);
+                     
+             }pong4.play();   
+             };
+             document.getElementById("button4").onmouseup=function(){     
+                     repeat4 = false;  
+             };
+             
+             
+             
+             
+             
+             //5
+             document.getElementById("button5").onmousedown=function(){
+                 //to trigger and terminate sample repetition
+                 if(canRepeat === true) {
+                     repeat5 = true;
+                     pong5.play();
+                     list[i-1].push(5);
+                 } 
+                 //if the sample isnt already at the time slot, add it on
+                 if (i < list.length && list[i].indexOf(5) === -1) {
+                     list[i-1].push(5);
+                     
+             }
+                 pong5.play();
+             };
+             document.getElementById("button5").onmouseup=function(){     
+                     repeat5 = false;  
+             };
+             //6
+             document.getElementById("button6").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat6 = true;
+                     pong6.play();
+                     list[i-1].push(6);
+                     
+                 }
+                 if (i < list.length && list[i].indexOf(6) === -1) {
+                     list[i-1].push(6);
+                     
+             }
+             pong6.play();   
+             };
+             document.getElementById("button6").onmouseup=function(){     
+                     repeat6 = false;  
+             };
+             
+             //7
+             document.getElementById("button7").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat7 = true;
+                     pong7.play();
+                     list[i-1].push(7);
+                 }
+                 if (i < list.length && list[i].indexOf(7) === -1) {
+                     list[i-1].push(7);
+                     
+             }pong7.play();    
+             };
+             document.getElementById("button7").onmouseup=function(){     
+                     repeat7 = false;  
+             };
+             
+             //8
+             document.getElementById("button8").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat8 = true;
+                     pong8.play();
+                     list[i-1].push(8);
+                 } 
+                 if (i < list.length && list[i].indexOf(8) === -1) {
+                     list[i-1].push(8);
+                     
+             }pong4.play();   
+             };
+             document.getElementById("button8").onmouseup=function(){     
+                     repeat8 = false;  
+             };
+             
+             document.getElementById("button9").onmousedown=function(){
+                     if(canRepeat === true) {
+                     repeat9 = true;
+                     pong9.play();
+                     list[i-1].push(9);
+                 } 
+                 if (i < list.length && list[i].indexOf(9) === -1) {
+                     list[i-1].push(9);
+                     
+             }pong9.play();   
+             };
+             document.getElementById("button9").onmouseup=function(){     
+                     repeat9 = false;  
+             };
+             
+             
+            
+             
+             
+     
+         var i = 0;//instantiating the iterator 
+         //sample starting list
+         var list = [[0],[4],[0],[0],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[4],[0],[0],[0],[0],[4],[0],[0],[0],[0],[0],[0],[0],[0],[0],[1], [0],[0],[0],[0],[0],[0],[0],[0],[0],[4],[0],[0],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[4],[0],[0],[0],[0],[4],[0],[0],[0],[0],[0],[0],[0],[0],[0],[1], [0],[0],[0],[0],[0],[0],[0],[0]]; 
+         // if you want to start with no initial beat
+         var list1 = [[0],[4],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]];
+         var list2 = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]];
+         
+            document.getElementById("duplicate").onclick=function(){
+               // var list2 = list; 
+                //var list3 = [];   
+             
+               var list4 = new Array();
+               // list3 =  list2.concat(list);
+                for (var j = 0; j < list.length*2; j++) {
+                    if (j < list.length) {
+                        list4.push(list[j]);
+                    } else {list4.push(list[j-list.length]);};
+                }
+                list = list4;
+                console.log(list);
+                };
+           
+           
+                 
+         function delayedLoop(){   
+             
+             console.log(i); // got rid of all indexOF errors for good! 
+             // repeat samples if canRepeat === true
+             //1 
+             if (repeat1 === true) {
+                 if ((i + stamp)%tempo ===0 && i < list.length) {
+                 list[i].push(1);
+                 } else if ((i+ stamp)%tempo === 0) {
+                     pong.play();
+                 }
+             }
+             //2
+             if (repeat2 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(2);
+                 } else if (i%tempo === 0) {
+                     pong2.play();
+                 }
+             }
+             //3
+             if (repeat3 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(3);
+                 } else if (i%tempo === 0) {
+                     pong3.play();
+                 }
+             }
+             //4
+             if (repeat4 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(4);
+                 } else if (i%tempo === 0) {
+                     pong4.play();
+                 }
+             }
+             
+             //5
+             if (repeat5 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(5);
+                 } else if (i%tempo === 0) {
+                     pong5.play();
+                 }
+             }
+             
+             //6
+             if (repeat6 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(6);
+                 } else if (i%tempo === 0) {
+                     pong6.play();
+                 }
+             }
+             
+             //7
+             if (repeat7 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(7);
+                 } else if (i%tempo === 0) {
+                     pong7.play();
+                 }
+             }
+             //8
+             if (repeat8 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(8);
+                 } else if (i%tempo === 0) {
+                     pong8.play();
+                 }
+             }
+             //9
+             if (repeat9 === true) {
+                 if (i%tempo ===0 && i < list.length) {
+                 list[i].push(9);
+                 } else if (i%tempo === 0) {
+                     pong9.play();
+                 }
+             }
+             
+             
+             //if its in the nested array, play it!!
+             if (i < list.length &&list[i].indexOf(1) !== -1) {
+                 pong.play();
+             } 
+             if (i < list.length &&list[i].indexOf(2) !== -1) {
+                 pong2.play();
+             } 
+             if (i < list.length &&list[i].indexOf(3) !== -1) {
+                 pong3.play();
+             } 
+             if (i < list.length &&list[i].indexOf(4) !== -1) {
+                 pong4.play(); 
+             }
+             if (i < list.length &&list[i].indexOf(5) !== -1) {
+                 pong5.play();
+             } 
+             if (i < list.length &&list[i].indexOf(6) !== -1) {
+                 pong6.play();
+             } 
+             if (i < list.length &&list[i].indexOf(7) !== -1) {
+                 pong7.play();
+             } 
+             if (i < list.length &&list[i].indexOf(8) !== -1) {
+                 pong8.play(); 
+             }
+             if (i < list.length &&list[i].indexOf(9) !== -1) {
+                 pong9.play(); 
+             }
+           // extend the song lenght if desired.  Not allowed wh looping 
+           if(i++ === list.length -2 ) {
+                     
+                     if (pusher === true && loop=== false ) {
+                 list.push(new Array(1));
+                 list[i][0] = 0;
+                 
+                
+             }
+             if (loop) {
+                 i = 0;
+             }
+              
+             }  
+     
+           
+             //to delay the loop
+             window.setTimeout(delayedLoop , 50);
+             
+             
+         }
+         delayedLoop();
+     </script>  
+  </body>
+</html>
